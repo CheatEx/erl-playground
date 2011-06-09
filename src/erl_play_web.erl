@@ -22,8 +22,7 @@ loop(Req, DocRoot) ->
                     Response = Req:ok({"text/html; charset=utf-8",
                                         [{"Server","Mochiweb-Test"}],
                                         chunked}),
-                    Response:write_chunk("Mochiconntest welcomes you! Your Id: " ++ Id ++ "\n"),
-                    %% router:login(list_to_atom(Id), self()),
+                    router:login(list_to_atom(Id), self()),
                     feed(Response, Id, 1);
                 _ ->
                     Req:not_found()
@@ -39,15 +38,13 @@ loop(Req, DocRoot) ->
 
 feed(Response, Path, N) ->
     receive
-        %{router_msg, Msg} ->
-        %    Html = io_lib:format("Recvd msg #~w: '~s'", [N, Msg]),
-        %    Response:write_chunk(Html);
-        after 10000 ->
-            Msg = io_lib:format("Chunk ~w for id ~s\n", [N, Path]),
-            Response:write_chunk(Msg)
-        end,
+        {router_msg, Msg} ->
+            Html = io_lib:format("Recvd msg #~w: '~s'", [N, Msg]),
+            Response:write_chunk(Html)
+    end,
         feed(Response, Path, N+1).
 
 %% Internal API
 get_option(Option, Options) ->
     {proplists:get_value(Option, Options), proplists:delete(Option, Options)}.
+
