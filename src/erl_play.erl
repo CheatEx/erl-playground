@@ -1,10 +1,31 @@
+%% @author Mochi Media <dev@mochimedia.com>
+%% @copyright 2010 Mochi Media <dev@mochimedia.com>
+
+%% @doc erl_play.
+
 -module(erl_play).
--behaviour(application).
+-author("Mochi Media <dev@mochimedia.com>").
+-export([start/0, stop/0]).
 
--export([start/2, stop/1]).
+ensure_started(App) ->
+    case application:start(App) of
+        ok ->
+            ok;
+        {error, {already_started, App}} ->
+            ok
+    end.
 
-start(_Type, _Args) ->
-erl_play_sup:start_link().
 
-stop(_State) ->
-ok.
+%% @spec start() -> ok
+%% @doc Start the erl_play server.
+start() ->
+    erl_play_deps:ensure(),
+    ensure_started(crypto),
+    application:start(erl_play).
+
+
+%% @spec stop() -> ok
+%% @doc Stop the erl_play server.
+stop() ->
+    application:stop(erl_play).
+
