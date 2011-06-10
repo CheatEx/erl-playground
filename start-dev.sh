@@ -1,6 +1,8 @@
 #!/bin/sh
 # NOTE: mustache templates need \ because they are not awesome.
 exec erl -pa ebin edit deps/*/ebin -boot start_sasl \
-    -sname erl_play_dev \
+    -sname n1 \
     -s erl_play \
-    -s reloader
+    -s reloader \
+    +K true \
+    -P 134217727
