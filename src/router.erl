@@ -63,8 +63,15 @@ handle_call({send, Id, Msg}, _From, State) ->
   Pids = [ P || { _Id, P } <- ets:lookup(State#state.id2pid, Id) ],
   % send Msg to them all
   M = {router_msg, Msg},
-  [ Pid ! M || Pid <- Pids ],
-  {reply, ok, State}.
+  case Pids of
+    [] ->
+      io:format("No pids found for id ~w\n", [Id]),
+      {reply, noPids, State};
+    NotEmptyPids ->
+      io:format("Sending message to web actors\n"),
+      [ Pid ! M || Pid <- NotEmptyPids],
+      {reply, ok, State}
+  end.
 
 % handle death and cleanup of logged in processes
 handle_info(Info, State) ->

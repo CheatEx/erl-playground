@@ -7,7 +7,7 @@ start(Options) ->
         ?MODULE:loop(Req, DocRoot)
     end,
     %we'll set our maximum to 1 million connections.
-    mochiweb_http:start([{max, 1000000}, {name, ?MODULE}, {loop, Loop} | Options1]).
+    mochiweb_http:start([{max, 100000}, {name, ?MODULE}, {loop, Loop} | Options1]).
 
 
 stop() ->
@@ -40,9 +40,11 @@ feed(Response, Path, N) ->
     receive
         {router_msg, Msg} ->
             Html = io_lib:format("Recvd msg #~w: '~s'", [N, Msg]),
-            Response:write_chunk(Html)
+            io:format("Recvd msg #~w: '~s'", [N, Msg]),
+            Response:write_chunk(Html);
+        Wtf -> io:format("Unexpected message: ~s", [Wtf])
     end,
-        feed(Response, Path, N+1).
+    feed(Response, Path, N+1).
 
 %% Internal API
 get_option(Option, Options) ->
