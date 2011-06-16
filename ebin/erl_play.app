@@ -1,9 +1,0 @@
-{application,erl_play,
-             [{description,"erl_play"},
-              {vsn,"0.1"},
-              {modules,[erl_play,erl_play_app,erl_play_deps,erl_play_sup,
-                        erl_play_web,floodtest,router]},
-              {registered,[]},
-              {mod,{erl_play_app,[]}},
-              {env,[]},
-              {applications,[kernel,stdlib,crypto]}]}.
