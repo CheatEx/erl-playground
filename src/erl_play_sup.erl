@@ -42,7 +42,8 @@ upgrade() ->
 %% @doc supervisor callback.
 init([]) ->
     Web = web_specs(erl_play_web, 8080),
-    Processes = [Web],
+    Router = router_specs(router),
+    Processes = [Web, Router],
     Strategy = {one_for_one, 10, 10},
     {ok,
      {Strategy, lists:flatten(Processes)}}.
@@ -54,3 +55,9 @@ web_specs(Mod, Port) ->
     {Mod,
      {Mod, start, [WebConfig]},
      permanent, 5000, worker, dynamic}.
+
+router_specs(Mod) ->
+    {Mod,
+     {Mod, start_link, []},
+     permanent, 5000, worker, dynamic}.
+
