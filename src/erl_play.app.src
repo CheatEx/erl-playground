@@ -1,5 +1,5 @@
 %% -*- erlang -*-
-{application, erl_play_app,
+{application, erl_play,
  [{description, "erl_play"},
   {vsn, "0.1"},
   {modules, []},
